@@ -1,0 +1,7 @@
+[alias]
+    g = log --graph -C -M --pretty=format:\"%C(yellow)<%h>%Creset %ad %C(cyan)[%an]%Creset %Cgre    en%d%Creset %s\" --date=short
+    graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+[user]
+	name = hymd-research
+[url "git@github.com:"]
+	insteadOf = https://github.com/
