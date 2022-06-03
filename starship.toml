@@ -15,8 +15,8 @@ style = "bold red"
 error_symbol = "[❯](bold red)"
 
 [cmd_duration]
-min_time = 10000  # Show command duration over 10,000 milliseconds (=10 sec)
-format = "took [$duration]($style)"
+min_time = 3000  # Show command duration over 10,000 milliseconds (=10 sec)
+format = "	took [$duration]($style)"
 
 [username]
 style_user = "blue bold dimmed"
