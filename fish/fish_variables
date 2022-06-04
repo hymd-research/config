@@ -1,6 +1,9 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR __fish_initialized:3400
+SETUVAR _fish_abbr_dir:exa\x20\x2d\x2dicons\x20\x2d1\x20\x2d\x2dgroup\x2ddirectories\x2dfirst\x20\x20\x2d\x2dtree\x20\x2d\x2dlevel\x3d1
+SETUVAR _fish_abbr_rg:rg\x20\x2d\x2dthreads\x204
+SETUVAR _fish_abbr_sk:sk\x20\x7c\x20hawk\x20\x2dd\x3a\x20\x2dm\x20\x27head\x27
 SETUVAR _fisher_danhper_2F_fish_2D_ssh_2D_agent_files:/Users/hymd/\x2econfig/fish/functions/__ssh_agent_is_started\x2efish\x1e/Users/hymd/\x2econfig/fish/functions/__ssh_agent_start\x2efish\x1e/Users/hymd/\x2econfig/fish/conf\x2ed/fish\x2dssh\x2dagent\x2efish
 SETUVAR _fisher_jorgebucaran_2F_fisher_files:/Users/hymd/\x2econfig/fish/functions/fisher\x2efish\x1e/Users/hymd/\x2econfig/fish/completions/fisher\x2efish
 SETUVAR _fisher_joseluisq_2F_gitnow_40_32_2E_31_2E_31__files:/Users/hymd/\x2econfig/fish/functions/__gitnow_config_file\x2efish\x1e/Users/hymd/\x2econfig/fish/functions/__gitnow_functions\x2efish\x1e/Users/hymd/\x2econfig/fish/functions/__gitnow_manual\x2efish\x1e/Users/hymd/\x2econfig/fish/conf\x2ed/gitnow\x2efish\x1e/Users/hymd/\x2econfig/fish/conf\x2ed/gitnow_config\x2efish
