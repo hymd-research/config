@@ -14,6 +14,7 @@ require'jetpack'.startup(function (use)
 	use { 'hrsh7th/cmp-buffer' }
 	use { 'folke/lua-dev.nvim' }
 	use { 'hashivim/vim-terraform' }
+	use { 'dag/vim-fish' }
 end)
 
 require'nvim-web-devicons'.setup {
