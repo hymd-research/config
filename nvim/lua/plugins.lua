@@ -13,8 +13,9 @@ require'jetpack'.startup(function (use)
 	use { 'hrsh7th/cmp-nvim-lsp' }
 	use { 'hrsh7th/cmp-buffer' }
 	use { 'folke/lua-dev.nvim' }
-	use { 'hashivim/vim-terraform' }
 	use { 'dag/vim-fish' }
+	use { 'hashivim/vim-terraform' }
+	use { 'simrat39/rust-tools.nvim' }
 end)
 
 require'nvim-web-devicons'.setup {
@@ -22,6 +23,9 @@ require'nvim-web-devicons'.setup {
 }
 
 require'nvim-tree'.setup {
+}
+
+require'rust-tools'.setup{
 }
 
 require'lualine'.setup {
