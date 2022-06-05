@@ -3,6 +3,7 @@
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
 [user]
 	name = hymd
+	email = hymd.email@gmail.com
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [credential]
