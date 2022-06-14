@@ -19,21 +19,19 @@ function fzf_key_bindings
   function fzf-file-widget -d "List files and folders"
     set -l commandline (__fzf_parse_commandline)
     set -l dir $commandline[1]
-    set -l fzf_query $commandline[2]
+    set -l query $commandline[2]
     set -l prefix $commandline[3]
 
     # "-path \$dir'*/\\.*'" matches hidden files/folders inside $dir but not
     # $dir itself, even if hidden.
     test -n "$FZF_CTRL_T_COMMAND"; or set -l FZF_CTRL_T_COMMAND "
-    command find -L \$dir -mindepth 1 \\( -path \$dir'*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' \\) -prune \
-    -o -type f -print \
-    -o -type d -print \
-    -o -type l -print 2> /dev/null | sed 's@^\./@@'"
+    command fd --follow --min-depth 1 --type f --type l 2> /dev/null '$query' $dir | sed 's@^\./@@'"
 
     test -n "$FZF_TMUX_HEIGHT"; or set FZF_TMUX_HEIGHT 40%
     begin
-      set -lx FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS"
-      eval "$FZF_CTRL_T_COMMAND | "(__fzfcmd)' -m --query "'$fzf_query'"' | while read -l r; set result $result $r; end
+      set -lx FZF_DEFAULT_COMMAND $FZF_CTRL_T_COMMAND
+      set -lx FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --reverse --bind=ctrl-z:ignore $FZF_CTRL_T_OPTS"
+      eval (__fzfcmd)' -m --query "'$query'"' | rargs -d: echo {1} | while read -l r; set result $result $r; end
     end
     if [ -z "$result" ]
       commandline -f repaint
@@ -53,21 +51,11 @@ function fzf_key_bindings
   function fzf-history-widget -d "Show command history"
     test -n "$FZF_TMUX_HEIGHT"; or set FZF_TMUX_HEIGHT 40%
     begin
-      set -lx FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT $FZF_DEFAULT_OPTS --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS +m"
+      set -lx FZF_DEFUALT_COMMAND "history -z"
+      set -lx FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS +m"
 
-      set -l FISH_MAJOR (echo $version | cut -f1 -d.)
-      set -l FISH_MINOR (echo $version | cut -f2 -d.)
-
-      # history's -z flag is needed for multi-line support.
-      # history's -z flag was added in fish 2.4.0, so don't use it for versions
-      # before 2.4.0.
-      if [ "$FISH_MAJOR" -gt 2 -o \( "$FISH_MAJOR" -eq 2 -a "$FISH_MINOR" -ge 4 \) ];
-        history -z | eval (__fzfcmd) --read0 --print0 -q '(commandline)' | read -lz result
-        and commandline -- $result
-      else
-        history | eval (__fzfcmd) -q '(commandline)' | read -l result
-        and commandline -- $result
-      end
+      eval (__fzfcmd) --read0 --print0 -q '(commandline)' | read -lz result
+      and commandline -- $result
     end
     commandline -f repaint
   end
@@ -75,16 +63,16 @@ function fzf_key_bindings
   function fzf-cd-widget -d "Change directory"
     set -l commandline (__fzf_parse_commandline)
     set -l dir $commandline[1]
-    set -l fzf_query $commandline[2]
+    set -l query $commandline[2]
     set -l prefix $commandline[3]
 
     test -n "$FZF_ALT_C_COMMAND"; or set -l FZF_ALT_C_COMMAND "
-    command find -L \$dir -mindepth 1 \\( -path \$dir'*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' \\) -prune \
-    -o -type d -print 2> /dev/null | sed 's@^\./@@'"
+    command fd --follow --min-depth 1 --type d --type l 2> /dev/null '$query' $dir | sed 's@^\./@@'"
     test -n "$FZF_TMUX_HEIGHT"; or set FZF_TMUX_HEIGHT 40%
     begin
-      set -lx FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS"
-      eval "$FZF_ALT_C_COMMAND | "(__fzfcmd)' +m --query "'$fzf_query'"' | read -l result
+      set -lx FZF_DEFAULT_COMMAND $FZF_ALT_C_COMMAND
+      set -lx FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --reverse --bind=ctrl-z:ignore $FZF_ALT_C_OPTS"
+      eval (__fzfcmd)' +m --query "'$query'"' | read -l result
 
       if [ -n "$result" ]
         builtin cd -- $result
@@ -110,16 +98,6 @@ function fzf_key_bindings
     end
   end
 
-  bind \ct fzf-file-widget
-  bind \cr fzf-history-widget
-  bind \ec fzf-cd-widget
-
-  if bind -M insert > /dev/null 2>&1
-    bind -M insert \ct fzf-file-widget
-    bind -M insert \cr fzf-history-widget
-    bind -M insert \ec fzf-cd-widget
-  end
-
   function __fzf_parse_commandline -d 'Parse the current command line token and return split of existing filepath, fzf query, and optional -option= prefix'
     set -l commandline (commandline -t)
 
@@ -133,21 +111,21 @@ function fzf_key_bindings
     if [ -z $commandline ]
       # Default to current directory with no --query
       set dir '.'
-      set fzf_query ''
+      set query ''
     else
       set dir (__fzf_get_dir $commandline)
 
       if [ "$dir" = "." -a (string sub -l 1 -- $commandline) != '.' ]
         # if $dir is "." but commandline is not a relative path, this means no file path found
-        set fzf_query $commandline
+        set query $commandline
       else
         # Also remove trailing slash after dir, to "split" input properly
-        set fzf_query (string replace -r "^$dir/?" -- '' "$commandline")
+        set query (string replace -r "^$dir/?" -- '' "$commandline")
       end
     end
 
     echo $dir
-    echo $fzf_query
+    echo $query
     echo $prefix
   end
 
@@ -167,6 +145,16 @@ function fzf_key_bindings
     end
 
     echo $dir
+  end
+
+  bind \ct fzf-file-widget
+  bind \cr fzf-history-widget
+  bind \ec fzf-cd-widget
+
+  if bind -M insert > /dev/null 2>&1
+    bind -M insert \ct fzf-file-widget
+    bind -M insert \cr fzf-history-widget
+    bind -M insert \ec fzf-cd-widget
   end
 
 end
