@@ -1,12 +1,14 @@
 vim.cmd "colorscheme iceberg"
 
-vim.opt.tabstop = 4
 vim.opt.number = true
 vim.opt.autoindent = true
 vim.opt.splitright = true
 vim.opt.termguicolors = true
 vim.opt.incsearch = true
 vim.opt.smartcase = true
+
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 
 vim.opt_global.completeopt = { "menu", "menuone", "noselect" }
 vim.opt_global.diffopt = { 'internal', 'filler', 'closeoff', 'vertical' }
