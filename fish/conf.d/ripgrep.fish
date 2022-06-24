@@ -1,1 +1,1 @@
-set -x RIPGREP_CONFIG_PATH $XDG_CONFIG_HOME/ripgreprc
+set -x RIPGREP_CONFIG_PATH $XDG_CONFIG_HOME/ripgrep/ripgreprc
