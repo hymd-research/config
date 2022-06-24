@@ -8,6 +8,9 @@ require'jetpack'.startup(function (use)
 		run = { ':TSUpdate' }
 	}
 	use {
+		'p00f/nvim-ts-rainbow'
+	}
+	use {
 		'kyazdani42/nvim-web-devicons'
 	}
 	use {
@@ -44,16 +47,22 @@ require'jetpack'.startup(function (use)
 		'L3MON4D3/LuaSnip'
 	}
 	use {
-		'saadparwaiz1/cmp_luasnip'
+		'hrsh7th/nvim-cmp'
 	}
 	use {
-		'hrsh7th/nvim-cmp'
+		'saadparwaiz1/cmp_luasnip'
 	}
 	use {
 		'hrsh7th/cmp-nvim-lsp'
 	}
 	use {
 		'hrsh7th/cmp-buffer'
+	}
+	use {
+		'hrsh7th/cmp-path'
+	}
+	use {
+		'hrsh7th/cmp-cmdline'
 	}
 	use {
 		'folke/lua-dev.nvim'

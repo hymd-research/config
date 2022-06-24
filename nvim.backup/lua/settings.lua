@@ -22,7 +22,13 @@ require'nvim-tree'.setup {
 
 require'nvim-treesitter.configs'.setup {
 	highlight = { enable = true },
-	indent = { enable = true }
+	indent = { enable = true },
+	rainbow = {
+		enable = true,
+		extended_mode = true,
+		max_file_lines = nil,
+		colors = { '#bf616a', '#a89984', '#b48ead', '#ebcb8b', '#a3be8c', '#d08770', '#8fbcbb', }
+	},
 }
 
 require'fzf-lua'.setup {
@@ -38,9 +44,9 @@ require'fzf-lua'.setup {
 		cmd          = 'fd --follow --hidden --color always --threads 4 --type f --type l --exclude .git',
 	},
 	grep = {
-		prompt       = 'Rg❯ ',
+		-- prompt       = 'Rg❯ ',
 		multiprocess = true,
-		cmd          = 'rg --line-number --no-heading --smart-case --color always',
+		-- cmd          = 'rg --line-number --no-heading --smart-case --color always',
 	},
 }
 
@@ -163,8 +169,5 @@ require("neogit").setup {
 			["s"] = "",
 		}
 	}
-}
-
-require'rust-tools'.setup{
 }
 
