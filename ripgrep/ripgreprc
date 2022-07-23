@@ -1,1 +1,2 @@
 --threads=4
+--colors=path:fg:cyan

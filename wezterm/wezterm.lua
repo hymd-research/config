@@ -5,6 +5,7 @@ return {
     font = wezterm.font("Hack Nerd Font Mono"),
     font_size = 14.0,
     native_macos_fullscreen_mode = false,
+    default_cursor_style = "BlinkingUnderline",
     colors = {
         foreground = "#eceef0",
         background = "#263137",
